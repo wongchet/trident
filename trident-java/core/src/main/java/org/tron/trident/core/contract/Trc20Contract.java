@@ -159,6 +159,21 @@ public class Trc20Contract extends Contract {
         return wrapper.broadcastTransaction(signedTxn);
       }
 
+    public String transfer(String destAddr, BigInteger amountFull, String memo, long feeLimit) {
+        Function transfer = new Function("transfer",
+                Arrays.asList(new Address(destAddr),
+                        new Uint256(amountFull)),
+                Arrays.asList(new TypeReference<Bool>() {}));
+
+        TransactionBuilder builder = wrapper.triggerCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()),
+                Base58Check.bytesToBase58(cntrAddr.toByteArray()), transfer);
+        builder.setFeeLimit(feeLimit);
+        builder.setMemo(memo);
+
+        Transaction signedTxn = wrapper.signTransaction(builder.build());
+        return wrapper.broadcastTransaction(signedTxn);
+    }
+
       /**
        * call function transferFrom(address _from, address _to, uint256 _value) public returns (bool success)
        * 
@@ -189,6 +204,21 @@ public class Trc20Contract extends Contract {
         Transaction signedTxn = wrapper.signTransaction(builder.build());
         return wrapper.broadcastTransaction(signedTxn);
       }
+
+    public String transferFrom(String fromAddr, String destAddr, BigInteger amountFull, String memo, long feeLimit) {
+        Function transferFrom = new Function("transferFrom",
+                Arrays.asList(new Address(fromAddr) ,new Address(destAddr),
+                        new Uint256(amountFull)),
+                Arrays.asList(new TypeReference<Bool>() {}));
+
+        TransactionBuilder builder = wrapper.triggerCall(Base58Check.bytesToBase58(ownerAddr.toByteArray()),
+                Base58Check.bytesToBase58(cntrAddr.toByteArray()), transferFrom);
+        builder.setFeeLimit(feeLimit);
+        builder.setMemo(memo);
+
+        Transaction signedTxn = wrapper.signTransaction(builder.build());
+        return wrapper.broadcastTransaction(signedTxn);
+    }
 
       /**
        * Call function approve(address _spender, uint256 _value) public returns (bool success)
